@@ -34,6 +34,20 @@ The following is an example of configuration.
 </source>
 ```
 
+You can use basic authentication.
+
+```
+<source>
+  type sendgrid_event
+  host 127.0.0.1
+  port 9191
+  tag sendgrid
+
+  username auth_username
+  password auth_password
+</source>
+
+```
 If you would like to use ssl, you can enable as below.
 
 ```

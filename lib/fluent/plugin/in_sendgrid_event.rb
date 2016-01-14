@@ -10,6 +10,8 @@ module Fluent
     config_param :ssl, :bool, :default => false
     config_param :certificate, :string, :default => nil
     config_param :private_key, :string, :default => nil
+    config_param :username, :string, :default => nil
+    config_param :password, :string, :default => nil
     config_param :request_uri, :string, :default => "/"
 
     unless method_defined?(:log)
@@ -57,6 +59,13 @@ module Fluent
           listen[:SSLPrivateKey] = OpenSSL::PKey::RSA.new(open(@private_key).read)
         else
           log.error "in_sendgrid_event: couldn't find certificate: '#{@certificate}' or ssl key: '#{@private_key}'"
+        end
+      end
+      if @username && @password
+        listen[:RequestCallback] = lambda do |req, res|
+          WEBrick::HTTPAuth.basic_auth(req, res, "fluent-plugin-sendgrid-event") do |username, password|
+            username == @username && @password
+          end
         end
       end
 

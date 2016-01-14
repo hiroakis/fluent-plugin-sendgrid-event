@@ -1,3 +1,5 @@
+require 'webrick/https'
+
 module Fluent
   class SendGridEventInput < Input
     Plugin.register_input('sendgrid_event', self)
@@ -5,6 +7,9 @@ module Fluent
     config_param :tag, :string, :default => nil
     config_param :host, :string, :default => "0.0.0.0"
     config_param :port, :integer, :default => 9191
+    config_param :ssl, :bool, :default => false
+    config_param :certificate, :string, :default => nil
+    config_param :private_key, :string, :default => nil
     config_param :request_uri, :string, :default => "/"
 
     unless method_defined?(:log)
@@ -45,6 +50,15 @@ module Fluent
         :BindAddress => @host,
         :Port => @port
       }
+      if @ssl
+        if File.exists?(@certificate) && File.exists?(@private_key)
+          listen[:SSLEnable] = @ssl
+          listen[:SSLCertificate] = OpenSSL::X509::Certificate.new(open(@certificate).read)
+          listen[:SSLPrivateKey] = OpenSSL::PKey::RSA.new(open(@private_key).read)
+        else
+          log.error "in_sendgrid_event: couldn't find certificate: '#{@certificate}' or ssl key: '#{@private_key}'"
+        end
+      end
 
       @server = WEBrick::HTTPServer.new(listen)
       @server.mount_proc(@request_uri) do |req, res|

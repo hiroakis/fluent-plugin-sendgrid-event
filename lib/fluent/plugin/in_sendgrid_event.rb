@@ -64,7 +64,7 @@ module Fluent
       if @username && @password
         listen[:RequestCallback] = lambda do |req, res|
           WEBrick::HTTPAuth.basic_auth(req, res, "fluent-plugin-sendgrid-event") do |username, password|
-            username == @username && @password
+            username == @username && password == @password
           end
         end
       end

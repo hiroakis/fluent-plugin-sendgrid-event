@@ -34,6 +34,21 @@ The following is an example of configuration.
 </source>
 ```
 
+If you would like to use ssl, you can enable as below.
+
+```
+<source>
+  type sendgrid_event
+  host 127.0.0.1
+  port 9191
+  tag sendgrid
+
+  ssl true
+  certificate /path/to/certificate.pem
+  private_key /path/to/private_key.key
+</source>
+```
+
 ## Contributing
 
 1. Fork it ( http://github.com/hiroakis/fluent-plugin-sendgrid-event/fork )

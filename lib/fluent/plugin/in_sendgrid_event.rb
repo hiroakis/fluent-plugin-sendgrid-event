@@ -11,7 +11,7 @@ module Fluent
     config_param :certificate, :string, :default => nil
     config_param :private_key, :string, :default => nil
     config_param :username, :string, :default => nil
-    config_param :password, :string, :default => nil
+    config_param :password, :string, :default => nil, :secret => true
     config_param :request_uri, :string, :default => "/"
 
     unless method_defined?(:log)

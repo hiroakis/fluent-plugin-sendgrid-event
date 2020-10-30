@@ -1,4 +1,5 @@
 require 'webrick/https'
+require 'fluent/input'
 
 module Fluent
   class SendGridEventInput < Input

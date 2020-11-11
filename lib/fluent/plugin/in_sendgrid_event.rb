@@ -18,6 +18,10 @@ module Fluent
     unless method_defined?(:log)
       define_method("log") { $log }
     end
+  
+    unless method_defined?(:router)
+      define_method("router") { Fluent::Engine }
+    end
 
     def initialize
       super
@@ -101,7 +105,7 @@ module Fluent
 
     def emit_event(event)
       log.trace "in_sendgrid_event: emit_event"
-      Engine.emit("#{tag}", Engine.now, event)
+      router.emit("#{tag}", Fluent::EventTime.now, event)
     end
   end
 end

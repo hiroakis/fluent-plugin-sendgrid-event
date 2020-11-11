@@ -105,7 +105,7 @@ module Fluent
 
     def emit_event(event)
       log.trace "in_sendgrid_event: emit_event"
-      router.emit("#{tag}", router.now, event)
+      router.emit("#{tag}", Fluent::EventTime.now, event)
     end
   end
 end
